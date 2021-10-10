@@ -5,9 +5,12 @@ import button
 SCREEN_HEIGHT = 720
 SCREEN_WIDTH = 1280
 
-#Position of the table
+#position of the table
 PERIODIC_TABLE_X = 100
 PERIODIC_TABLE_Y = 100
+
+#number of elements
+e = 7
 
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -16,19 +19,19 @@ pygame.display.set_caption('Button Demo')
 images = []
 
 #load element images, note: range = number of elements
-for i in range(1):
+for i in range(e):
 	i = str(i+1)
-	temp = 1 #I havent made the images yet
+	temp = '1' #I havent made the images yet
 	images.append(pygame.image.load('images/'+temp+'.png').convert_alpha())
+
+
+#create element instances, positioning elements
+elements = []
 
 x = PERIODIC_TABLE_X
 y = PERIODIC_TABLE_Y
 
-#create button instances, positioning elements
-
-elements = []
-
-for i in range(1):
+for i in range(e):
     x = x + 65
     elements.append(button.Button(x, y, images[i]))
 
@@ -38,13 +41,10 @@ while run:
 
 	screen.fill((202, 228, 241)) #nice blue colour
 
-	i = 0
-
-	if elements[0].draw(screen):
-		print('Click')
-
-	#if elements[7].draw(screen):
-	#	print('Click 2')
+	for i in range(e):
+		if elements[i].draw(screen):
+			i = str(i+1)
+			print('Click ['+i+']')
 
 	#event handler
 	for event in pygame.event.get():
