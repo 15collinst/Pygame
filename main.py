@@ -1,5 +1,6 @@
 import pygame
 import setup
+import sprite
 
 # create display window
 SCREEN_HEIGHT = 720
@@ -32,16 +33,25 @@ setup.instance_elements(PERIODIC_TABLE_X, PERIODIC_TABLE_Y, TABLE, images, eleme
 
 # game loop
 run = True
+spawn = False
 while run:
+	mx,my = pygame.mouse.get_pos()
 
-	# nice blue background
+	# nice green background
 	screen.fill((154, 199, 145))
 
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(88):
 		if elements[i].draw(screen):
-			i = str(i+1)
-			print('Click ['+i+']')
+			spawn = True
+			clicked = i + 1
+
+	#creates a sprite which tracks the mouse when you hold down
+	if spawn:
+		sprite.spawn(clicked, screen, mx, my)
+		print(clicked)
+		if event.type == pygame.MOUSEBUTTONUP:
+			spawn = False
 
 	# event handler
 	for event in pygame.event.get():

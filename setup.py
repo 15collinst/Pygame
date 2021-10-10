@@ -7,7 +7,7 @@ def instance_imgs(arr):
     for i in range(88): # note: range = number of elements
         i = str(i+1)
         temp = '1' # note: I havent made the images yet
-        arr.append(pygame.image.load('images/'+temp+'.png').convert_alpha())
+        arr.append(pygame.image.load('images/buttons/'+temp+'.png').convert_alpha())
 
     return arr
 
