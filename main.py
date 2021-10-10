@@ -42,14 +42,14 @@ while run:
 
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(88):
-		if elements[i].draw(screen):
+		if elements[i].draw(screen) and spawn == False:
 			spawn = True
 			clicked = i + 1
+			print(clicked)
 
 	#creates a sprite which tracks the mouse when you hold down
 	if spawn:
 		sprite.spawn(clicked, screen, mx, my)
-		print(clicked)
 		if event.type == pygame.MOUSEBUTTONUP:
 			spawn = False
 
