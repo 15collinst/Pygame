@@ -10,6 +10,9 @@ class Button():
 		self.rect.topleft = (x, y)
 		self.clicked = False
 
+	def get_width(width):
+		return width
+
 	def draw(self, surface):
 		action = False
 		#get mouse position
@@ -29,6 +32,14 @@ class Button():
 
 		return action
 
+
+class Reaction_Chamber(Button):
+	def __init__(self, x, y, image, scale):
+		super().__init__(x, y, image, scale)
+
+	#350
+	#117
+	
 	def hover(self, surface):
 		hover = False
 
@@ -42,3 +53,7 @@ class Button():
 		surface.blit(self.image, (self.rect.x, self.rect.y))
 
 		return hover
+
+	
+
+
