@@ -57,6 +57,9 @@ while run:
 		print(clicked)
 		spawn = False
 
+	if not mouse:
+		spawn = False
+
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(88):
 		if elements[i].draw(screen) and not spawn:
