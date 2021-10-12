@@ -13,7 +13,8 @@ def instance_imgs(arr):
 
 # create element instances, positions elements
 def instance_elements(px, py, table, imgs, arr):
-    p = 0
+
+    i = 0
     row = 0
     
     for r in table:
@@ -21,8 +22,8 @@ def instance_elements(px, py, table, imgs, arr):
         for c in r:
             x = px + ((c - 1) * 64)
             y = py + ((row - 1) * 64)
-            arr.append(button.Button(x, y, imgs[p]))
-            p = p + 1
+            arr.append(button.Button(x, y, imgs[i], 0.64))
+            i = i + 1
 
     return arr
 

@@ -1,6 +1,7 @@
 import pygame
 import setup
 import sprite
+import button
 
 # create display window
 SCREEN_HEIGHT = 720
@@ -11,8 +12,10 @@ screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption('Periodic Table')
 
 # position of the table
-PERIODIC_TABLE_X = (SCREEN_WIDTH - 1152) / 2 #centers the periodic table - 1151 = width of periodic table
-PERIODIC_TABLE_Y = (SCREEN_HEIGHT - 500) #520 = height of periodic table
+PERIODIC_TABLE_X = (SCREEN_WIDTH - 1152) / 2 #centers the periodic table
+PERIODIC_TABLE_Y = (SCREEN_HEIGHT - 500) 
+
+REACTION_CHAMBER_X = (SCREEN_WIDTH - 400) / 2
 
 # coordinates of table
 TABLE = [[1,18],
@@ -31,30 +34,45 @@ setup.instance_imgs(images)
 elements = []
 setup.instance_elements(PERIODIC_TABLE_X, PERIODIC_TABLE_Y, TABLE, images, elements)
 
+#create reaction chamber
+reaction_chamber_img = pygame.image.load("images/reaction_chamber.png").convert_alpha()
+reaction_chamber = button.Button(REACTION_CHAMBER_X, 30, reaction_chamber_img, 1)
+
+collide = 1
+
 # game loop
 run = True
 spawn = False
+mouse = False
+in_box = False
+
 while run:
 	mx,my = pygame.mouse.get_pos()
 
 	# nice green background
 	screen.fill((154, 199, 145))
 
+	# if player selects an element return element value
+	if reaction_chamber.hover(screen) and spawn and not mouse:
+		print(clicked)
+		spawn = False
+
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(88):
-		if elements[i].draw(screen) and spawn == False:
+		if elements[i].draw(screen) and not spawn:
 			spawn = True
 			clicked = i + 1
-			print(clicked)
 
 	#creates a sprite which tracks the mouse when you hold down
 	if spawn:
 		sprite.spawn(clicked, screen, mx, my)
-		if event.type == pygame.MOUSEBUTTONUP:
-			spawn = False
 
 	# event handler
 	for event in pygame.event.get():
+		if event.type == pygame.MOUSEBUTTONDOWN:
+			mouse = True
+		if event.type == pygame.MOUSEBUTTONUP:
+			mouse = False
 		# quit game
 		if event.type == pygame.QUIT:
 			run = False

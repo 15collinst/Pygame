@@ -2,8 +2,7 @@ import pygame
 
 #button class
 class Button():
-	def __init__(self, x, y, image):
-		scale = 0.64
+	def __init__(self, x, y, image, scale):
 		width = image.get_width()
 		height = image.get_height()
 		self.image = pygame.transform.scale(image, (int(width * scale), int(height * scale)))
@@ -29,3 +28,17 @@ class Button():
 		surface.blit(self.image, (self.rect.x, self.rect.y))
 
 		return action
+
+	def hover(self, surface):
+		hover = False
+
+		#get mouse position
+		pos = pygame.mouse.get_pos()
+
+		if self.rect.collidepoint(pos):
+			hover = True
+
+		#draw button on screen
+		surface.blit(self.image, (self.rect.x, self.rect.y))
+
+		return hover
