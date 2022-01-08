@@ -36,9 +36,6 @@ class Button():
 class Reaction_Chamber(Button):
 	def __init__(self, x, y, image, scale):
 		super().__init__(x, y, image, scale)
-
-	#350
-	#117
 	
 	def hover(self, surface):
 		hover = False

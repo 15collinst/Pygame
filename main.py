@@ -46,7 +46,6 @@ KEY = button.Reaction_Chamber(KEY_X, KEY_Y, KEY_IMG, 1)
 OTHER_ELEMENTS_IMG = pygame.image.load("assets/misc/Other_elements.svg").convert_alpha()
 OTHER_ELEMENTS = button.Reaction_Chamber(36, 625, OTHER_ELEMENTS_IMG, 1)
 
-
 collide = 1
 
 # game loop
