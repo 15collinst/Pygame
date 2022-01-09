@@ -38,19 +38,18 @@ class Electron():
     def draw(self):
         orbit_pos = self.get_position(mx, my)
         pygame.draw.circle(screen, orbit_col, orbit_pos, ELECTRON_SIZE, 0)
-
         self.angle += ROTATION_SPEED
     
-    def get_angle(self):
+    def get_closest_electron(self):
+        closest_distance = ORBIT_RADIUS * 2 
         for i in range(len(ELECTRONS)):
             x1, y1 = self.get_position(mx,my)
             x2, y2 = ELECTRONS[i].get_position(mx,my)
-            distance_to_neighbour = math.sqrt( ((x1 - x2) ** 2) + ((y1 - y2) ** 2) )
-            pygame.draw.line(screen, RED, [x1, y1], [x2, y2], 5)
-
-        
-        
-
+            distance_to_neighbour = math.sqrt( ((x2 - x1) ** 2) + ((y2 - y1) ** 2) )
+            if distance_to_neighbour < closest_distance and distance_to_neighbour != 0:
+                closest_distance = distance_to_neighbour
+                closest_electron = ELECTRONS[i]
+        pygame.draw.line(screen, RED, self.get_position(mx,my), closest_electron.get_position(mx,my), 5)
 
 ELECTRONS.append(Electron())
 
@@ -70,15 +69,10 @@ while run:
         if len(ELECTRONS) == 1:
             pass
         else:
-            ELECTRONS[i].get_angle()
-
-    
-
-    
+            ELECTRONS[i].get_closest_electron()
 
     pygame.display.update()
 
     clock.tick(120)
-
 
 pygame.quit
