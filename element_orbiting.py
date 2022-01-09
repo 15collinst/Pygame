@@ -26,37 +26,28 @@ class Electron():
         self.angle = 0
         self.reactivity = 0
 
+    def get_position(self, mx, my):
+        sine_of_orbit_degree = math.sin(self.angle * 0.0174532925)
+        x_coordinate = mx + (sine_of_orbit_degree * ORBIT_RADIUS)
+
+        cosine_of_orbit_degree = math.cos(self.angle * 0.0174532925)
+        y_coordinate = my + (cosine_of_orbit_degree * ORBIT_RADIUS)
+
+        return [x_coordinate, y_coordinate]
+
     def draw(self):
-        mx,my = pygame.mouse.get_pos()
-        orbit_pos = [self.get_x(mx), self.get_y(my)]
+        orbit_pos = self.get_position(mx, my)
         pygame.draw.circle(screen, orbit_col, orbit_pos, ELECTRON_SIZE, 0)
 
         self.angle += ROTATION_SPEED
     
-    def get_x(self, mx):
-        sine_of_orbit_degree = math.sin(self.angle * 0.0174532925)
-        return mx + (sine_of_orbit_degree * ORBIT_RADIUS)
-
-    def get_y(self, my):
-        cosine_of_orbit_degree = math.cos(self.angle * 0.0174532925)
-        return my + (cosine_of_orbit_degree * ORBIT_RADIUS)
-    
     def get_angle(self):
-        if len(ELECTRONS) == 1:
-            pass
-        else:
-            mx,my = pygame.mouse.get_pos()
-            closest_distance = ORBIT_RADIUS * 2
-            for i in range(len(ELECTRONS)):
-                x1 = self.get_x(mx)
-                y1 = self.get_y(my)
-                x2 = ELECTRONS[i].get_y(my)
-                y2 = ELECTRONS[i].get_x(mx)
-                distance_to_neighbour = math.sqrt( ((x2 - x1) ** 2) + ((y2 - y1) ** 2) )
+        for i in range(len(ELECTRONS)):
+            x1, y1 = self.get_position(mx,my)
+            x2, y2 = ELECTRONS[i].get_position(mx,my)
+            distance_to_neighbour = math.sqrt( ((x1 - x2) ** 2) + ((y1 - y2) ** 2) )
+            pygame.draw.line(screen, RED, [x1, y1], [x2, y2], 5)
 
-
-                if distance_to_neighbour < closest_distance:
-                    pygame.draw.line(screen, RED, [y2, x2], [y1, x1], 5)
         
         
 
@@ -64,6 +55,7 @@ class Electron():
 ELECTRONS.append(Electron())
 
 while run:
+    mx,my = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -73,9 +65,16 @@ while run:
     screen.fill(bg)
 
     for i in range(len(ELECTRONS)):
+        # print(ELECTRONS[i].get_position(mx, my))
         ELECTRONS[i].draw()
+        if len(ELECTRONS) == 1:
+            pass
+        else:
+            ELECTRONS[i].get_angle()
 
-    ELECTRONS[0].get_angle()
+    
+
+    
 
     pygame.display.update()
 
