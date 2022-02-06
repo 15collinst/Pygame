@@ -42,14 +42,20 @@ class Electron():
         pygame.draw.circle(screen, orbit_col, orbit_pos, ELECTRON_SIZE, 0)
 
 class Element():
-    def __new__(cls, atomic_number):
-        for i in range(atomic_number):
-            ELECTRONS.append(Electron())
-        return super(Element, cls).__new__(cls)
+    # def __new__(cls, atomic_number):
+    #     electrons = []
+    #     for i in range(atomic_number):
+    #         electrons.append(Electron())
+    #     return super(Element, cls).__new__(cls)
         
     def __init__(element, atomic_number):
         element.atomic_number = atomic_number
-        element.electrons = []
+
+        electrons = []
+        for i in range(atomic_number):
+            electrons.append(Electron())
+
+        element.electrons = electrons
 
     def draw(element, screen, mx ,my):
         elements = ["H", "He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"]
@@ -59,26 +65,24 @@ class Element():
         sprite_centre_x = mx - img.get_width() / 2
         sprite_centre_y = my - img.get_height() / 2  
         screen.blit(img, (sprite_centre_x, sprite_centre_y))
-        
 
-test_element = Element(2)
+        for i in range(len(element.electrons)):
+            rotation = i * (360 / len(element.electrons))
+            element.electrons[i].draw(angle+rotation)
+
+test_element = Element(18)
 
 while run:
     mx,my = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        # if event.type == pygame.MOUSEBUTTONDOWN:
-        #     ELECTRONS.append(Electron())
 
     screen.fill(bg)
 
     test_element.draw(screen, mx ,my)
 
-    for i in range(len(ELECTRONS)):
-        rotation = i * (360 / len(ELECTRONS))
-        ELECTRONS[i].draw(angle+rotation)
-
+    #spin element
     angle += ROTATION_SPEED
 
     pygame.display.update()
@@ -86,3 +90,4 @@ while run:
     clock.tick(120)
 
 pygame.quit
+
