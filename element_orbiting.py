@@ -40,46 +40,44 @@ class Electron():
     def draw(self, angle):
         orbit_pos = self.get_position(mx, my, angle)
         pygame.draw.circle(screen, orbit_col, orbit_pos, ELECTRON_SIZE, 0)
-    
-    # def get_closest_electron(self,angle):
 
-    #     closest_distance = ORBIT_RADIUS * 2 
-    #     for i in range(len(ELECTRONS)):
-    #         x1, y1 = self.get_position(mx,my,angle)
-    #         x2, y2 = ELECTRONS[i].get_position(mx,my,angle)
-    #         distance_to_neighbour = math.sqrt( ((x2 - x1) ** 2) + ((y2 - y1) ** 2) )
+class Element():
+    def __new__(cls, atomic_number):
+        for i in range(atomic_number):
+            ELECTRONS.append(Electron())
+        return super(Element, cls).__new__(cls)
+        
+    def __init__(element, atomic_number):
+        element.atomic_number = atomic_number
+        element.electrons = []
 
-    #         if distance_to_neighbour < closest_distance:
-    #             closest_distance = distance_to_neighbour
-    #             closest_electron = ELECTRONS[i]
+    def draw(element, screen, mx ,my):
+        elements = ["H", "He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"]
+        symbol = elements[element.atomic_number -1]
+        font = pygame.font.Font("assets/sprites/Roboto-Regular.ttf", 32)
+        img = font.render(symbol, True, (0,0,0))
+        sprite_centre_x = mx - img.get_width() / 2
+        sprite_centre_y = my - img.get_height() / 2  
+        screen.blit(img, (sprite_centre_x, sprite_centre_y))
+        
 
-    #     pygame.draw.line(screen, RED, self.get_position(mx,my,angle), closest_electron.get_position(mx,my,angle), 5)
-
-    #     R = ORBIT_RADIUS
-    #     D = closest_distance
-    #     angle_apart = math.degrees(2 * math.asin(D / (2 * R)))
-
-
-ELECTRONS.append(Electron())
+test_element = Element(2)
 
 while run:
     mx,my = pygame.mouse.get_pos()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            ELECTRONS.append(Electron())
+        # if event.type == pygame.MOUSEBUTTONDOWN:
+        #     ELECTRONS.append(Electron())
 
     screen.fill(bg)
 
+    test_element.draw(screen, mx ,my)
+
     for i in range(len(ELECTRONS)):
         rotation = i * (360 / len(ELECTRONS))
-        # print(ELECTRONS[i].get_position(mx, my))
         ELECTRONS[i].draw(angle+rotation)
-        # if len(ELECTRONS) == 1:
-        #     pass
-        # else:
-        #     ELECTRONS[i].get_closest_electron(angle)
 
     angle += ROTATION_SPEED
 
