@@ -4,6 +4,8 @@ import sprite
 import button
 import time
 
+pygame.init()
+
 # create display window
 SCREEN_HEIGHT = 1024
 SCREEN_WIDTH = 1440
