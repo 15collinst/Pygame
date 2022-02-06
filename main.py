@@ -104,8 +104,9 @@ class Element():
 run = True
 spawn = False
 mouse = False
+clock = pygame.time.Clock()
 
-active_element = Element(1)
+active_element = Element(15)
 
 while run:
 	# event handler
@@ -132,10 +133,6 @@ while run:
 	# draw the static images
 	KEY.draw(SCREEN)
 	OTHER_ELEMENTS.draw(SCREEN)
-
-	#creates a sprite which tracks the mouse when you hold down
-	# if spawn:
-	active_element.draw(SCREEN, mx ,my)
 	
 	#spin element
 	angle += ROTATION_SPEED
@@ -147,6 +144,12 @@ while run:
 			spawn = True
 			clicked = i + 1
 
+	#creates a sprite which tracks the mouse when you hold down
+	# if spawn:
+	active_element.draw(SCREEN, mx ,my)
+
 	pygame.display.update()
+
+	clock.tick(120)
 
 pygame.quit()
