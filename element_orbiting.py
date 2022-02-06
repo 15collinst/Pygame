@@ -42,16 +42,11 @@ class Electron():
         pygame.draw.circle(screen, orbit_col, orbit_pos, ELECTRON_SIZE, 0)
 
 class Element():
-    # def __new__(cls, atomic_number):
-    #     electrons = []
-    #     for i in range(atomic_number):
-    #         electrons.append(Electron())
-    #     return super(Element, cls).__new__(cls)
-        
     def __init__(element, atomic_number):
         element.atomic_number = atomic_number
-
+        element.angle = 0
         num_of_electrons = atomic_number
+
         if atomic_number > 2:
             num_of_electrons = atomic_number - 2
         if atomic_number > 10:
@@ -74,7 +69,9 @@ class Element():
 
         for i in range(len(element.electrons)):
             rotation = i * (360 / len(element.electrons))
-            element.electrons[i].draw(angle+rotation)
+            element.electrons[i].draw(element.angle+rotation)
+            
+        element.angle += 1
 
 test_element = Element(1)
 

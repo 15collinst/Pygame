@@ -1,6 +1,5 @@
 import pygame
 
-#button class
 class Button():
 	def __init__(self, x, y, image, scale):
 		width = image.get_width()
@@ -31,15 +30,3 @@ class Button():
 		surface.blit(self.image, (self.rect.x, self.rect.y))
 
 		return action
-
-
-class Static_Image(Button):
-	def __init__(self, x, y, image, scale):
-		super().__init__(x, y, image, scale)
-	
-	def draw(self, surface):
-		surface.blit(self.image, (self.rect.x, self.rect.y))
-
-	
-
-
