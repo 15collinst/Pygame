@@ -51,11 +51,17 @@ class Element():
     def __init__(element, atomic_number):
         element.atomic_number = atomic_number
 
-        electrons = []
-        for i in range(atomic_number):
-            electrons.append(Electron())
+        num_of_electrons = atomic_number
+        if atomic_number > 2:
+            num_of_electrons = atomic_number - 2
+        if atomic_number > 10:
+            num_of_electrons = atomic_number - 10
 
+        electrons = []
+        for i in range(num_of_electrons):
+            electrons.append(Electron())
         element.electrons = electrons
+        
 
     def draw(element, screen, mx ,my):
         elements = ["H", "He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"]
@@ -70,7 +76,7 @@ class Element():
             rotation = i * (360 / len(element.electrons))
             element.electrons[i].draw(angle+rotation)
 
-test_element = Element(18)
+test_element = Element(1)
 
 while run:
     mx,my = pygame.mouse.get_pos()
