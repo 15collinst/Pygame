@@ -33,23 +33,12 @@ class Button():
 		return action
 
 
-class Reaction_Chamber(Button):
+class Static_Image(Button):
 	def __init__(self, x, y, image, scale):
 		super().__init__(x, y, image, scale)
 	
-	def hover(self, surface):
-		hover = False
-
-		#get mouse position
-		pos = pygame.mouse.get_pos()
-
-		if self.rect.collidepoint(pos):
-			hover = True
-
-		#draw button on screen
+	def draw(self, surface):
 		surface.blit(self.image, (self.rect.x, self.rect.y))
-
-		return hover
 
 	
 

@@ -36,17 +36,13 @@ setup.instance_imgs(images)
 elements = []
 setup.instance_elements(PERIODIC_TABLE_X, PERIODIC_TABLE_Y, TABLE, images, elements)
 
-# create reaction chamber
-reaction_chamber_img = pygame.image.load("assets/misc/Reaction_Chamber.svg").convert_alpha()
-reaction_chamber = button.Reaction_Chamber(REACTION_CHAMBER_X, 25, reaction_chamber_img, 1)
-
 # create key
 KEY_IMG = pygame.image.load("assets/misc/Key.svg").convert_alpha()
-KEY = button.Reaction_Chamber(KEY_X, KEY_Y, KEY_IMG, 1)
+KEY = button.Static_Image(KEY_X, KEY_Y, KEY_IMG, 1)
 
 # create other elements
 OTHER_ELEMENTS_IMG = pygame.image.load("assets/misc/Other_elements.svg").convert_alpha()
-OTHER_ELEMENTS = button.Reaction_Chamber(36, 625, OTHER_ELEMENTS_IMG, 1)
+OTHER_ELEMENTS = button.Static_Image(36, 625, OTHER_ELEMENTS_IMG, 1)
 
 collide = 1
 
@@ -63,7 +59,7 @@ while run:
 	SCREEN.fill((34,61,92))
 
 	# if player selects an element return element value
-	if reaction_chamber.hover(SCREEN) and spawn and not mouse:
+	if my < 369 and spawn and not mouse:
 		clicked = str(clicked)
 		print('Element['+clicked+'] has been selected')
 		spawn = False
