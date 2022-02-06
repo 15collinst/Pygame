@@ -49,16 +49,16 @@ spawn = False
 mouse = False
 clock = pygame.time.Clock()
 
+static_elements = []
+
 while run:
 	# event handler
 	for event in pygame.event.get():
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			mouse = True
 		if event.type == pygame.MOUSEBUTTONUP:
 			# if player selects an element return element value
 			if my < 369 and spawn:
-				active_element = sprite.Sprite(clicked)
 				print(f"Element {clicked} has been selected")
+				static_elements.append([active_element, mx, my])
 			spawn = False
 			
 		# quit game
@@ -85,6 +85,9 @@ while run:
 	#creates a sprite which tracks the mouse when you hold down
 	if spawn:
 		active_element.draw(SCREEN, mx ,my)
+
+	for i in range(len(static_elements)):
+		static_elements[i][0].draw(SCREEN, static_elements[i][1] ,static_elements[i][2])
 
 	pygame.display.update()
 
