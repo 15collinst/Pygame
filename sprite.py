@@ -1,6 +1,6 @@
 import pygame
 
-def spawn(clicked, screen, mx ,my,element_number):
+def spawn( screen, mx ,my,element_number):
     elements = ["H", "He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"]
     font = pygame.font.Font("assets/sprites/Roboto-Regular.ttf", 32)
     img = font.render(elements[element_number -1], True, (255,255,255))

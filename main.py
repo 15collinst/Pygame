@@ -2,7 +2,6 @@ import pygame
 import setup
 import sprite
 import button
-import time
 
 pygame.init()
 
@@ -18,8 +17,7 @@ pygame.display.set_caption('Periodic Table')
 PERIODIC_TABLE_X = 40
 PERIODIC_TABLE_Y = 375
 
-REACTION_CHAMBER_X = (SCREEN_WIDTH - (618)) /2
-
+# position of the key
 KEY_X = (SCREEN_WIDTH - (1086)) / 2
 KEY_Y = SCREEN_HEIGHT - 40
 
@@ -44,33 +42,21 @@ KEY = button.Static_Image(KEY_X, KEY_Y, KEY_IMG, 1)
 OTHER_ELEMENTS_IMG = pygame.image.load("assets/misc/Other_elements.svg").convert_alpha()
 OTHER_ELEMENTS = button.Static_Image(36, 625, OTHER_ELEMENTS_IMG, 1)
 
-collide = 1
-
 # game loop
 run = True
 spawn = False
 mouse = False
-in_box = False
 
 while run:
+	# get the positions of the mouse
 	mx,my = pygame.mouse.get_pos()
 
-	# grey background
+	# blue background
 	SCREEN.fill((34,61,92))
 
-	# if player selects an element return element value
-	if my < 369 and spawn and not mouse:
-		clicked = str(clicked)
-		print('Element['+clicked+'] has been selected')
-		spawn = False
-
+	# draw the static images
 	KEY.draw(SCREEN)
 	OTHER_ELEMENTS.draw(SCREEN)
-
-
-	# if player lets go of mouse get rid of sprite
-	if not mouse:
-		spawn = False
 
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(18):
@@ -81,14 +67,19 @@ while run:
 
 	#creates a sprite which tracks the mouse when you hold down
 	if spawn:
-		sprite.spawn(clicked, SCREEN, mx, my,element_number)
+		sprite.spawn(SCREEN, mx, my,element_number)
 
 	# event handler
 	for event in pygame.event.get():
 		if event.type == pygame.MOUSEBUTTONDOWN:
 			mouse = True
 		if event.type == pygame.MOUSEBUTTONUP:
-			mouse = False
+			# if player selects an element return element value
+			if my < 369 and spawn:
+				clicked = str(clicked)
+				print('Element['+clicked+'] has been selected')
+			spawn = False
+			
 		# quit game
 		if event.type == pygame.QUIT:
 			run = False
