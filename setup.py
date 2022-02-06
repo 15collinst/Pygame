@@ -29,4 +29,3 @@ def instance_elements(px, py, table, imgs, arr):
             i = i + 1
 
     return arr
-

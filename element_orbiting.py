@@ -28,12 +28,12 @@ class Electron():
         self.angle = 0
         self.reactivity = 0
 
-    def get_position(self, mx, my, angle):
+    def get_position(self, X, Y, angle):
         sine_of_orbit_degree = math.sin(angle * 0.0174532925)
-        x_coordinate = mx + (sine_of_orbit_degree * ORBIT_RADIUS)
+        x_coordinate = X + (sine_of_orbit_degree * ORBIT_RADIUS)
 
         cosine_of_orbit_degree = math.cos(angle * 0.0174532925)
-        y_coordinate = my + (cosine_of_orbit_degree * ORBIT_RADIUS)
+        y_coordinate = Y + (cosine_of_orbit_degree * ORBIT_RADIUS)
 
         return [x_coordinate, y_coordinate]
 
