@@ -80,9 +80,6 @@ while run:
 	KEY.draw(SCREEN)
 	OTHER_ELEMENTS.draw(SCREEN)
 
-	if REFRESH.draw(SCREEN):
-		static_elements = []
-
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(18):
 		if ELEMENTS[i].draw(SCREEN) and not spawn:
@@ -93,9 +90,14 @@ while run:
 	#creates a sprite which tracks the mouse when you hold down
 	if spawn:
 		active_element.draw(SCREEN, mx ,my)
+		if active_element.active(mx ,my, static_elements):
+			print("wow")
 
 	for i in range(len(static_elements)):
 		static_elements[i][0].draw(SCREEN, static_elements[i][1] ,static_elements[i][2])
+
+	if REFRESH.draw(SCREEN):
+		static_elements = []
 
 	pygame.display.update()
 
