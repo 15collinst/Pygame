@@ -1,7 +1,7 @@
 import pygame
-import element
+import button
 
-class Static_Image(element.Button):
+class Static_Image(button.Button):
 	def __init__(self, x, y, image, scale):
 		super().__init__(x, y, image, scale)
 	

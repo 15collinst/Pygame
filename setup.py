@@ -1,5 +1,5 @@
 import pygame
-import element
+import button
 
 MARGIN_X = 7
 MARGIN_Y = 8
@@ -25,7 +25,7 @@ def instance_elements(px, py, table, imgs, arr):
         for c in r:
             x = px + ((c - 1) * (69 + MARGIN_X))
             y = py + ((row - 1) * (75 + MARGIN_Y))
-            arr.append(element.Button(x, y, imgs[i], 1))
+            arr.append(button.Button(x, y, imgs[i], 1))
             i = i + 1
 
     return arr

@@ -2,6 +2,7 @@ import pygame
 import setup
 import sprite
 import image
+import button
 import math
 
 pygame.init()
@@ -34,6 +35,10 @@ KEY = image.Static_Image(KEY_X, KEY_Y, KEY_IMG, 1)
 # create other elements
 OTHER_ELEMENTS_IMG = pygame.image.load("assets/misc/Other_elements.svg").convert_alpha()
 OTHER_ELEMENTS = image.Static_Image(36, 625, OTHER_ELEMENTS_IMG, 1)
+
+# create refresh button
+REFRESH_IMG = pygame.image.load("assets/misc/Refresh_Button.svg").convert_alpha()
+REFRESH = button.Button((SCREEN_WIDTH / 2) - 61.5, 0, REFRESH_IMG, 1)
 
 # creates instances of the images
 IMAGES = []
@@ -74,6 +79,9 @@ while run:
 	# draw the static images
 	KEY.draw(SCREEN)
 	OTHER_ELEMENTS.draw(SCREEN)
+
+	if REFRESH.draw(SCREEN):
+		static_elements = []
 
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(18):
