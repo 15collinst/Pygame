@@ -56,6 +56,26 @@ clock = pygame.time.Clock()
 
 static_elements = []
 
+def move_elements(mx, my, x, y, direction):
+    dx = mx - x
+    dy = my - y
+
+    angle = math.atan2(dx,dy)
+
+    #returns between 1 or -1 to adjust angle
+    mvx = math.sin(angle)  
+    mvy = math.cos(angle)
+
+    if direction == "pull":
+        x += mvx * 2 #if the difference in charge is greater times by bigger number
+        y += mvy * 2
+
+    if direction == "push":
+        x -= mvx * 2 #if the difference in charge is greater times by bigger number
+        y -= mvy * 2
+
+    return x,y
+
 while run:
 	# event handler
 	for event in pygame.event.get():
@@ -96,6 +116,18 @@ while run:
 
 	for i in range(len(static_elements)):
 		static_elements[i][0].draw(SCREEN, static_elements[i][1] ,static_elements[i][2])
+
+	if len(static_elements) == 1 and spawn:
+		x = static_elements[0][1]
+		y = static_elements[0][2]
+
+		distance_apart = int(math.sqrt((mx - x)**2 + (my - y)**2))
+		
+		if distance_apart >= (100 * 2):
+			static_elements[0][1],static_elements[0][2] = move_elements(mx, my, x, y, "pull")
+
+		if distance_apart < (100 * 2):
+			static_elements[0][1],static_elements[0][2] = move_elements(mx, my, x, y, "push")
 
 	pygame.display.update()
 
