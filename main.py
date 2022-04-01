@@ -91,13 +91,15 @@ while run:
 			active_element = sprite.Sprite(clicked_element, mx, my)
 			spawn = True
 
-	#creates a sprite which tracks the mouse when you hold down
+	# creates a sprite which tracks the mouse when you hold down
 	if spawn:
 		active_element.set_coordinates(mx, my)
 		active_element.draw(SCREEN)
 
-	for i in range(len(static_elements)):
-		static_elements[i].draw(SCREEN)
+	# draw other elements and move them around
+	for static_element in static_elements:
+		static_element.bond_element(static_elements)
+		static_element.draw(SCREEN)
 
 	pygame.display.update()
 

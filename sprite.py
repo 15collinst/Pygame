@@ -56,7 +56,6 @@ class Sprite():
 
         element.angle += 1
 
-
     def get_sharing_electrons(element):
         num_of_outer_electrons = len(element.electrons) + element.shared_electrons
 
@@ -70,7 +69,24 @@ class Sprite():
             if num_of_outer_electrons == 8: return 0
             else: return num_of_outer_electrons
 
-    def move_element(mx, my, x, y, direction):
+    def bond_element(element, list_of_elements):
+        for other_element in list_of_elements:
+
+            if element != other_element:
+                ex, ey = element.get_coordinates()
+                ox, oy = other_element.get_coordinates()
+                
+                distance_apart = int(math.sqrt((ex - ox)**2 + (ey - oy)**2))
+                
+                if distance_apart >= (75 * 2):
+                    x,y = element.move_element(ex, ey, ox, oy, "pull")
+                    element.set_coordinates(x,y)
+                    
+                if distance_apart < (75 * 2):
+                    x,y = element.move_element(ex, ey, ox, oy, "push")
+                    element.set_coordinates(x,y)    
+
+    def move_element(element, mx, my, x, y, direction):
         dx = mx - x
         dy = my - y
 
@@ -89,19 +105,6 @@ class Sprite():
             y -= mvy * 2
 
         return x,y
-
-
-# if len(static_elements) >= 1 and spawn:
-# 			x = static_elements[i][1]
-# 			y = static_elements[i][2]
-
-# 			distance_apart = int(math.sqrt((mx - x)**2 + (my - y)**2))
-			
-# 			if distance_apart >= (75 * 2):
-# 				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "pull")
-
-# 			if distance_apart < (75 * 2):
-# 				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "push")
 
 
 
