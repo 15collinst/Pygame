@@ -39,6 +39,9 @@ class Sprite():
     # get the elements coordinates
     def get_coordinates(element):
         return element.x, element.y
+
+    def get_num_of_electrons(element):
+        return len(element.electrons)
         
     # draws the element on the screen
     def draw(element, SCREEN):
@@ -55,7 +58,7 @@ class Sprite():
 
 
     def get_sharing_electrons(element):
-        num_of_outer_electrons = len(element.electrons) + element.shared_electrons
+        num_of_outer_electrons = element.get_num_of_electrons() + element.shared_electrons
 
         # exeption for H and He which are trying to achive an outer shell of 2
         if element.atomic_number <= 2:
@@ -77,13 +80,20 @@ class Sprite():
                 ex, ey = element.get_coordinates()
                 ox, oy = other_element.get_coordinates()
             
-                distance_apart = int(math.sqrt((ex - ox)**2 + (ey - oy)**2)) 
+                distance_apart = int(math.sqrt((ex - ox)**2 + (ey - oy)**2))
+
+                # if element is unreactive the push an extra 100px away
+                if element.get_num_of_electrons() == 8 or element.get_num_of_electrons() == 2: 
+                    if distance_apart < ((75 * 2) + 100):
+                        x,y = element.move_element(ex, ey, ox, oy, "push")
+                        other_element.set_coordinates(x,y) 
                     
                 # if the element is bonded and too close to something else then push apart to a 100px distance
                 if element.get_sharing_electrons() == None or other_element.get_sharing_electrons() == None: 
                     if distance_apart < (75 * 2):
                         x,y = element.move_element(ex, ey, ox, oy, "push")
                         other_element.set_coordinates(x,y) 
+
 
                 if element.get_sharing_electrons() != None and other_element.get_sharing_electrons() != None:
                     if distance_apart > (75 * 2):
