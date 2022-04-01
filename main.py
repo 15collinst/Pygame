@@ -3,7 +3,6 @@ import setup
 import sprite
 import image
 import button
-import math
 
 pygame.init()
 pygame.display.set_caption('Periodic Table')
@@ -94,14 +93,15 @@ while run:
 
 	#creates a sprite which tracks the mouse when you hold down
 	if spawn:
-		active_element.draw(SCREEN, mx ,my)
+		active_element.set_coordinates(mx, my)
+		active_element.draw(SCREEN)
 
 	for i in range(len(static_elements)):
-		element_x, element_y = static_elements[i].get_coordinates()
-		static_elements[i].draw(SCREEN, element_x ,element_y)
+		static_elements[i].draw(SCREEN)
 
 	pygame.display.update()
 
+	# 120 fps
 	clock.tick(120)
 
 pygame.quit()

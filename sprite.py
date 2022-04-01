@@ -26,7 +26,6 @@ class Sprite():
         if atomic_number > 10:
             num_of_electrons = atomic_number - 10
 
-
         # creates all the electrons for this element
         electrons = []
         for i in range(num_of_electrons):
@@ -35,23 +34,25 @@ class Sprite():
 
         print(element.get_sharing_electrons())
 
+    # set the elements coordinates
     def set_coordinates(element, x, y):
         element.x = x
         element.y = y
 
+    # get the elements coordinates
     def get_coordinates(element):
         return element.x, element.y
         
     # draws the element on the screen
-    def draw(element, SCREEN, x ,y):
-        sprite_centre_x = x - element.symbol.get_width() / 2
-        sprite_centre_y = y - element.symbol.get_height() / 2  
+    def draw(element, SCREEN):
+        sprite_centre_x = element.x - element.symbol.get_width() / 2
+        sprite_centre_y = element.y - element.symbol.get_height() / 2  
         SCREEN.blit(element.symbol, (sprite_centre_x, sprite_centre_y))
 
         # draw all of the electrons going around the element
         for i in range(len(element.electrons)):
             rotation = i * (360 / len(element.electrons))
-            element.electrons[i].draw(SCREEN, element.angle+rotation, x, y)
+            element.electrons[i].draw(SCREEN, element.angle+rotation, element.x, element.y)
 
         element.angle += 1
 
