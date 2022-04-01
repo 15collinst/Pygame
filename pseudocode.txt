@@ -1,0 +1,11 @@
+function findClosesestElement(self, other_Elements) {
+    closest_distance = infinity
+    for element in Elements
+        x1, y1 = self.get_position(mx,my)
+        x2, y2 = element.get_position(mx,my)
+        distance_to_element = sqrt(((x1 - x2) ** 2) + ((y1 - y2) ** 2))
+        if distance_to_element less than closest_distance AND distance_to_neighbour not 0 then
+            closest_distance = distance_to_neighbour
+            closest_element = element
+    return closest_element
+}

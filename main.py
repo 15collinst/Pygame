@@ -62,7 +62,7 @@ def move_elements(mx, my, x, y, direction):
 
     angle = math.atan2(dx,dy)
 
-    #returns between 1 or -1 to adjust angle
+    #returns between 1 or -1 to adjust distance between
     mvx = math.sin(angle)  
     mvy = math.cos(angle)
 
@@ -117,17 +117,17 @@ while run:
 	for i in range(len(static_elements)):
 		static_elements[i][0].draw(SCREEN, static_elements[i][1] ,static_elements[i][2])
 
-	if len(static_elements) == 1 and spawn:
-		x = static_elements[0][1]
-		y = static_elements[0][2]
+		if len(static_elements) >= 1 and spawn:
+			x = static_elements[i][1]
+			y = static_elements[i][2]
 
-		distance_apart = int(math.sqrt((mx - x)**2 + (my - y)**2))
-		
-		if distance_apart >= (100 * 2):
-			static_elements[0][1],static_elements[0][2] = move_elements(mx, my, x, y, "pull")
+			distance_apart = int(math.sqrt((mx - x)**2 + (my - y)**2))
+			
+			if distance_apart >= (75 * 2):
+				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "pull")
 
-		if distance_apart < (100 * 2):
-			static_elements[0][1],static_elements[0][2] = move_elements(mx, my, x, y, "push")
+			if distance_apart < (75 * 2):
+				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "push")
 
 	pygame.display.update()
 
