@@ -56,34 +56,15 @@ clock = pygame.time.Clock()
 
 static_elements = []
 
-def move_elements(mx, my, x, y, direction):
-    dx = mx - x
-    dy = my - y
-
-    angle = math.atan2(dx,dy)
-
-    #returns between 1 or -1 to adjust distance between
-    mvx = math.sin(angle)  
-    mvy = math.cos(angle)
-
-    if direction == "pull":
-        x += mvx * 2 #if the difference in charge is greater times by bigger number
-        y += mvy * 2
-
-    if direction == "push":
-        x -= mvx * 2 #if the difference in charge is greater times by bigger number
-        y -= mvy * 2
-
-    return x,y
-
 while run:
 	# event handler
 	for event in pygame.event.get():
 		if event.type == pygame.MOUSEBUTTONUP:
 			# if player selects an element return element value
 			if my < 369 and spawn:
-				print(f"Element {clicked} has been selected")
-				static_elements.append([active_element, mx, my])
+				print(f"Element {clicked_element} has been selected")
+				static_elements.append(active_element)
+				active_element.set_coordinates(mx,my)
 			spawn = False
 			
 		# quit game
@@ -100,14 +81,15 @@ while run:
 	KEY.draw(SCREEN)
 	OTHER_ELEMENTS.draw(SCREEN)
 
+	# refresh the screen if button is pressed
 	if REFRESH.draw(SCREEN):
 		static_elements = []
 
 	# loops over all elements drawing them and checking if they have been clicked
 	for i in range(18):
 		if ELEMENTS[i].draw(SCREEN) and not spawn:
-			clicked = i + 1
-			active_element = sprite.Sprite(clicked)
+			clicked_element = i + 1
+			active_element = sprite.Sprite(clicked_element, mx, my)
 			spawn = True
 
 	#creates a sprite which tracks the mouse when you hold down
@@ -115,19 +97,8 @@ while run:
 		active_element.draw(SCREEN, mx ,my)
 
 	for i in range(len(static_elements)):
-		static_elements[i][0].draw(SCREEN, static_elements[i][1] ,static_elements[i][2])
-
-		if len(static_elements) >= 1 and spawn:
-			x = static_elements[i][1]
-			y = static_elements[i][2]
-
-			distance_apart = int(math.sqrt((mx - x)**2 + (my - y)**2))
-			
-			if distance_apart >= (75 * 2):
-				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "pull")
-
-			if distance_apart < (75 * 2):
-				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "push")
+		element_x, element_y = static_elements[i].get_coordinates()
+		static_elements[i].draw(SCREEN, element_x ,element_y)
 
 	pygame.display.update()
 

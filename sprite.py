@@ -1,11 +1,13 @@
-from xml.etree.ElementTree import ElementTree
 import pygame
 import electron
+import math
 
 class Sprite():
-    def __init__(element, atomic_number):
-        # encapsulate the atomic number
+    def __init__(element, atomic_number, x, y):
+        # encapsulate the atomic number and coordinates
         element.atomic_number = atomic_number
+        element.x = x
+        element.y = y
 
         # set the elements starting angle and shared electrons
         element.angle = 0
@@ -32,6 +34,13 @@ class Sprite():
         element.electrons = electrons
 
         print(element.get_sharing_electrons())
+
+    def set_coordinates(element, x, y):
+        element.x = x
+        element.y = y
+
+    def get_coordinates(element):
+        return element.x, element.y
         
     # draws the element on the screen
     def draw(element, SCREEN, x ,y):
@@ -60,6 +69,38 @@ class Sprite():
             if num_of_outer_electrons == 8: return 0
             else: return num_of_outer_electrons
 
+    def move_element(mx, my, x, y, direction):
+        dx = mx - x
+        dy = my - y
+
+        angle = math.atan2(dx,dy)
+
+        #returns between 1 or -1 to adjust distance between
+        mvx = math.sin(angle)  
+        mvy = math.cos(angle)
+
+        if direction == "pull":
+            x += mvx * 2 #if the difference in charge is greater times by bigger number
+            y += mvy * 2
+
+        if direction == "push":
+            x -= mvx * 2 #if the difference in charge is greater times by bigger number
+            y -= mvy * 2
+
+        return x,y
+
+
+# if len(static_elements) >= 1 and spawn:
+# 			x = static_elements[i][1]
+# 			y = static_elements[i][2]
+
+# 			distance_apart = int(math.sqrt((mx - x)**2 + (my - y)**2))
+			
+# 			if distance_apart >= (75 * 2):
+# 				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "pull")
+
+# 			if distance_apart < (75 * 2):
+# 				static_elements[i][1],static_elements[i][2] = move_elements(mx, my, x, y, "push")
 
 
 
