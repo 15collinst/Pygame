@@ -80,11 +80,11 @@ class Sprite():
                 
                 if distance_apart >= (75 * 2):
                     x,y = element.move_element(ex, ey, ox, oy, "pull")
-                    element.set_coordinates(x,y)
+                    other_element.set_coordinates(x,y)
                     
                 if distance_apart < (75 * 2):
                     x,y = element.move_element(ex, ey, ox, oy, "push")
-                    element.set_coordinates(x,y)    
+                    other_element.set_coordinates(x,y)    
 
     def move_element(element, mx, my, x, y, direction):
         dx = mx - x
