@@ -99,10 +99,12 @@ class Sprite():
         if direction == "pull":
             x += mvx * 2 #if the difference in charge is greater times by bigger number
             y += mvy * 2
+            print("pull")
 
         if direction == "push":
-            x -= mvx * 2 #if the difference in charge is greater times by bigger number
-            y -= mvy * 2
+            x -= mvx * 1 #if the difference in charge is greater times by bigger number
+            y -= mvy * 1
+            print("push")
 
         return x,y
 
