@@ -11,13 +11,12 @@ class Sprite():
 
         # set the elements starting angle and shared electrons
         element.angle = 0
-        element.shared_electrons = 0
+        element.shared_electrons = 0 
 
         # set the symbol of the electron
-        elements = ["H", "He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"]
-        font = pygame.font.Font("assets/sprites/Roboto-Regular.ttf", 32)
-        element.symbol = font.render(elements[atomic_number -1], True, (255,255,255))
-
+        element.symbols = ["H", "He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"]
+        element.font = pygame.font.Font("assets/sprites/Roboto-Regular.ttf", 32)
+        element.symbol = element.font.render(element.symbols[element.atomic_number -1], True, (255,255,255))
 
         # deduce the number of outer shell electrons
         num_of_electrons = atomic_number
@@ -31,8 +30,6 @@ class Sprite():
         for i in range(num_of_electrons):
             electrons.append(electron.Electron())
         element.electrons = electrons
-
-        print(element.get_sharing_electrons())
 
     # set the elements coordinates
     def set_coordinates(element, x, y):
@@ -56,35 +53,52 @@ class Sprite():
 
         element.angle += 1
 
+
     def get_sharing_electrons(element):
         num_of_outer_electrons = len(element.electrons) + element.shared_electrons
 
         # exeption for H and He which are trying to achive an outer shell of 2
         if element.atomic_number <= 2:
             # element has a full outer shell and so no sharing electrons
-            if num_of_outer_electrons == 2: return 0
+            if num_of_outer_electrons == 2: return None
             else: return num_of_outer_electrons
         else:
             # element has a full outer shell and so no sharing electrons
-            if num_of_outer_electrons == 8: return 0
+            if num_of_outer_electrons == 8: return None
             else: return num_of_outer_electrons
+
 
     def bond_element(element, list_of_elements):
         for other_element in list_of_elements:
 
+            # if its not looking at itself
             if element != other_element:
+
                 ex, ey = element.get_coordinates()
                 ox, oy = other_element.get_coordinates()
-                
-                distance_apart = int(math.sqrt((ex - ox)**2 + (ey - oy)**2))
-                
-                if distance_apart >= (75 * 2):
-                    x,y = element.move_element(ex, ey, ox, oy, "pull")
-                    other_element.set_coordinates(x,y)
+            
+                distance_apart = int(math.sqrt((ex - ox)**2 + (ey - oy)**2)) 
                     
-                if distance_apart < (75 * 2):
-                    x,y = element.move_element(ex, ey, ox, oy, "push")
-                    other_element.set_coordinates(x,y)    
+                # if the element is bonded and too close to something else then push apart to a 100px distance
+                if element.get_sharing_electrons() == None or other_element.get_sharing_electrons() == None: 
+                    if distance_apart < (75 * 2):
+                        x,y = element.move_element(ex, ey, ox, oy, "push")
+                        other_element.set_coordinates(x,y) 
+
+                if element.get_sharing_electrons() != None and other_element.get_sharing_electrons() != None:
+                    if distance_apart > (75 * 2):
+                         x,y = element.move_element(ex, ey, ox, oy, "pull")
+                         other_element.set_coordinates(x,y)  
+                    if distance_apart < (74 * 2):
+                        x,y = element.move_element(ex, ey, ox, oy, "push")
+                        other_element.set_coordinates(x,y) 
+
+                    if distance_apart == (75 * 2):
+                        element.shared_electrons += 1
+                        other_element.shared_electrons += 1
+                        element.symbol = element.font.render(element.symbols[element.atomic_number -1], True, (255,255,0))
+                        other_element.symbol = other_element.font.render(other_element.symbols[other_element.atomic_number -1], True, (255,255,0))
+
 
     def move_element(element, mx, my, x, y, direction):
         dx = mx - x
@@ -97,14 +111,12 @@ class Sprite():
         mvy = math.cos(angle)
 
         if direction == "pull":
-            x += mvx * 2 #if the difference in charge is greater times by bigger number
-            y += mvy * 2
-            print("pull")
+            x += mvx * 1 #if the difference in charge is greater times by bigger number
+            y += mvy * 1
 
         if direction == "push":
             x -= mvx * 1 #if the difference in charge is greater times by bigger number
             y -= mvy * 1
-            print("push")
 
         return x,y
 
