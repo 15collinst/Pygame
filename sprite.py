@@ -54,7 +54,16 @@ class Sprite():
             rotation = i * (360 / len(element.electrons))
             element.electrons[i].draw(SCREEN, element.angle+rotation, element.x, element.y)
 
-        element.angle += 1
+    def active(element, mx, my, static_elements):
+        if not static_elements:
+            element.angle += 1
+        else:
+            for static_element in static_elements:
+                if math.sqrt(((static_element[1] - mx) ** 2) + ((static_element[2] - my) ** 2) ) > 300:
+                    print(f"not colliding with {static_element}")
+                else:
+                    print(f"colliding with {static_element}")
+        
 
 
     def get_sharing_electrons(element):

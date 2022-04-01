@@ -101,6 +101,9 @@ while run:
 		static_element.bond_element(static_elements)
 		static_element.draw(SCREEN)
 
+	if REFRESH.draw(SCREEN):
+		static_elements = []
+
 	pygame.display.update()
 
 	# 120 fps
