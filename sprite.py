@@ -9,14 +9,18 @@ class Sprite():
         element.x = x
         element.y = y
 
-        # set the elements starting angle and shared electrons
+        # set the electrons starting angle and shared electrons
         element.angle = 0
-        element.shared_electrons = 0 
 
         # set the symbol of the electron
         element.symbols = ["H", "He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar"]
         element.font = pygame.font.Font("assets/sprites/Roboto-Regular.ttf", 32)
         element.symbol = element.font.render(element.symbols[element.atomic_number -1], True, (255,255,255))
+
+        # lists to store elements electrons
+        element.unbonded_electrons = []
+        element.bonded_electrons = []
+        element.borrowed_electrons = []
 
         # deduce the number of outer shell electrons
         num_of_electrons = atomic_number
@@ -25,11 +29,10 @@ class Sprite():
         if atomic_number > 10:
             num_of_electrons = atomic_number - 10
 
-        # creates all the electrons for this element
-        electrons = []
+        # creates all the electrons for this element and adds them to the unbonded list
         for i in range(num_of_electrons):
-            electrons.append(electron.Electron())
-        element.electrons = electrons
+            element.unbonded_electrons.append(electron.Electron())
+
 
     # set the elements coordinates
     def set_coordinates(element, x, y):
@@ -41,7 +44,7 @@ class Sprite():
         return element.x, element.y
 
     def get_num_of_electrons(element):
-        return len(element.electrons)
+        return len(element.unbonded_electrons) + len(element.bonded_electrons) + len(element.borrowed_electrons)
         
     # draws the element on the screen
     def draw(element, SCREEN):
@@ -49,25 +52,10 @@ class Sprite():
         sprite_centre_y = element.y - element.symbol.get_height() / 2  
         SCREEN.blit(element.symbol, (sprite_centre_x, sprite_centre_y))
 
-        # draw all of the electrons going around the element
-        for i in range(len(element.electrons)):
-            rotation = i * (360 / len(element.electrons))
-            element.electrons[i].draw(SCREEN, element.angle+rotation, element.x, element.y)
-
-    def active(element, mx, my, static_elements):
-        if not static_elements:
-            element.angle += 1
-        else:
-            for static_element in static_elements:
-                if math.sqrt(((static_element[1] - mx) ** 2) + ((static_element[2] - my) ** 2) ) > 300:
-                    print(f"not colliding with {static_element}")
-                else:
-                    print(f"colliding with {static_element}")
+        element.draw_electrons(SCREEN)
         
-
-
     def get_sharing_electrons(element):
-        num_of_outer_electrons = element.get_num_of_electrons() + element.shared_electrons
+        num_of_outer_electrons = element.get_num_of_electrons()
 
         # exeption for H and He which are trying to achive an outer shell of 2
         if element.atomic_number <= 2:
@@ -96,28 +84,48 @@ class Sprite():
                     if distance_apart < ((75 * 2) + 100):
                         x,y = element.move_element(ex, ey, ox, oy, "push")
                         other_element.set_coordinates(x,y) 
+                        
                     
                 # if the element is bonded and too close to something else then push apart to a 100px distance
                 if element.get_sharing_electrons() == None or other_element.get_sharing_electrons() == None: 
                     if distance_apart < (75 * 2):
                         x,y = element.move_element(ex, ey, ox, oy, "push")
                         other_element.set_coordinates(x,y) 
+                        
 
-
+                # if elements both have a free electron then move closer together and if theyre touching theyre bonded
                 if element.get_sharing_electrons() != None and other_element.get_sharing_electrons() != None:
                     if distance_apart > (75 * 2):
                          x,y = element.move_element(ex, ey, ox, oy, "pull")
                          other_element.set_coordinates(x,y)  
-                    if distance_apart < (74 * 2):
+                         
+                    if distance_apart < (75 * 2):
                         x,y = element.move_element(ex, ey, ox, oy, "push")
                         other_element.set_coordinates(x,y) 
-
+                        
                     if distance_apart == (75 * 2):
-                        element.shared_electrons += 1
-                        other_element.shared_electrons += 1
-                        element.symbol = element.font.render(element.symbols[element.atomic_number -1], True, (255,255,0))
-                        other_element.symbol = other_element.font.render(other_element.symbols[other_element.atomic_number -1], True, (255,255,0))
+                        element.set_bonded(other_element)
+                        other_element.set_bonded(element)
+                        for i in range(len(element.unbonded_electrons)):
+                            element.unbonded_electrons[i].angle += 1
+                
+    def draw_electrons(element, SCREEN):
+        #draw unbonded electrons
+        for electron in element.unbonded_electrons:
+            electron.draw(SCREEN, element.x, element.y)
+        # draw bonded electrons
+        for electron in element.bonded_electrons:
+            electron.draw(SCREEN, element.x, element.y)
 
+    def set_bonded(element, other_element):
+        # move unbonded electron to bonded electrons
+        element.bonded_electrons.append(element.unbonded_electrons[0])
+        element.unbonded_electrons.pop(0)
+
+        # move bonded electron to other elements borrowed electrons
+        other_element.bonded_electrons.append(element.bonded_electrons[0])
+        
+        element.symbol = element.font.render(element.symbols[element.atomic_number -1], True, (255,0,255))
 
     def move_element(element, mx, my, x, y, direction):
         dx = mx - x
@@ -139,6 +147,8 @@ class Sprite():
 
         return x,y
 
-
-
-
+    def rotate_electrons(element, other_element):
+        for electron in element.electrons:
+            if not electron.get_bonded():
+                electron.colour = (255, 0, 0)
+                electron.rotate_electron(other_element.x, other_element.y, element.x, element.y)
