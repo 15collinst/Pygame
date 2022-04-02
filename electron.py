@@ -9,11 +9,10 @@ class Electron():
         electron.bonded = False
 
     def get_angle(electron, other_x, other_y, ex, ey):
-        x, y = electron.get_position(ex, ey)
-        dx = x - other_x
-        dy = y - other_y
+        dx = ex - other_x
+        dy = ey - other_y
 
-        adjustment = math.degrees(math.atan2(dx, dy))+90
+        electron.angle = math.degrees(math.atan2(dx, dy))+180
 
     def get_position(electron, mx, my):
         orbit_radius = 75

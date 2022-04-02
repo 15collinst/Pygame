@@ -21,6 +21,7 @@ class Sprite():
         element.unbonded_electrons = []
         element.bonded_electrons = []
         element.borrowed_electrons = []
+        element.bonded = False
 
         # deduce the number of outer shell electrons
         num_of_electrons = atomic_number
@@ -67,7 +68,6 @@ class Sprite():
             if num_of_outer_electrons == 8: return None
             else: return num_of_outer_electrons
 
-
     def bond_element(element, list_of_elements):
         for other_element in list_of_elements:
 
@@ -80,30 +80,31 @@ class Sprite():
                 distance_apart = int(math.sqrt((ex - ox)**2 + (ey - oy)**2))
 
                 # if element is unreactive the push an extra 100px away
-                if element.get_num_of_electrons() == 8 or element.get_num_of_electrons() == 2: 
+                if element.get_num_of_electrons() == 8 or element.get_num_of_electrons() == 2 and not element.bonded: 
                     if distance_apart < ((75 * 2) + 100):
                         x,y = element.move_element(ex, ey, ox, oy, "push")
                         other_element.set_coordinates(x,y) 
                         
                     
                 # if the element is bonded and too close to something else then push apart to a 100px distance
-                if element.get_sharing_electrons() == None or other_element.get_sharing_electrons() == None: 
-                    if distance_apart < (75 * 2):
+                if element.bonded: 
+                    element.bonded_electrons[0].get_angle(ox, oy, ex, ey)
+                    element.borrowed_electrons[0].get_angle(ox, oy, ex, ey)
+                    if distance_apart < (80 * 2):
                         x,y = element.move_element(ex, ey, ox, oy, "push")
                         other_element.set_coordinates(x,y) 
-                        
 
                 # if elements both have a free electron then move closer together and if theyre touching theyre bonded
                 if element.get_sharing_electrons() != None and other_element.get_sharing_electrons() != None:
-                    if distance_apart > (75 * 2):
+                    if distance_apart > (80 * 2):
                          x,y = element.move_element(ex, ey, ox, oy, "pull")
                          other_element.set_coordinates(x,y)  
                          
-                    if distance_apart < (75 * 2):
+                    if distance_apart < (80 * 2):
                         x,y = element.move_element(ex, ey, ox, oy, "push")
                         other_element.set_coordinates(x,y) 
                         
-                    if distance_apart == (75 * 2):
+                    if distance_apart == (80 * 2):
                         element.set_bonded(other_element)
                         other_element.set_bonded(element)
                         for i in range(len(element.unbonded_electrons)):
@@ -123,9 +124,11 @@ class Sprite():
         element.unbonded_electrons.pop(0)
 
         # move bonded electron to other elements borrowed electrons
-        other_element.bonded_electrons.append(element.bonded_electrons[0])
-        
+        other_element.borrowed_electrons.append(element.bonded_electrons[0])
+
+        # make the element go pink to show its bonded
         element.symbol = element.font.render(element.symbols[element.atomic_number -1], True, (255,0,255))
+        element.bonded = True
 
     def move_element(element, mx, my, x, y, direction):
         dx = mx - x
