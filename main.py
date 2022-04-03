@@ -76,7 +76,7 @@ while run:
 	# blue background
 	SCREEN.fill((34,61,92))
 
-	# draw the static imagesgit 
+	# draw the static images
 	KEY.draw(SCREEN)
 	OTHER_ELEMENTS.draw(SCREEN)
 
