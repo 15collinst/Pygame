@@ -114,10 +114,12 @@ class Sprite():
         #draw unbonded electrons
         for electron in element.electrons:
             electron.draw(SCREEN, element.x, element.y)
+            if electron.get_bonded() == None:
+                electron.angle += 1
 
     def set_bonded(element, other_element):
         for electron in element.electrons:
-            if electron.bonded_element == None:
+            if electron. get_bonded() == None:
                 electron.set_bonded(other_element)
 
         # make the element go pink to show its bonded
@@ -144,13 +146,6 @@ class Sprite():
 
         return x,y
 
-    def rotate_electrons(element, other_element):
-        for electron in element.electrons:
-            if not electron.get_bonded():
-                electron.colour = (255, 0, 0)
-                electron.rotate_electron(other_element.x, other_element.y, element.x, element.y)
-
 # Things left to do:
-# Make sure bonded / stable elements do not attract others
 # Space out any non bonded electrons
 # done
